@@ -1238,7 +1238,7 @@ body {
         transform: translateY(-8px) rotate(-45deg);
     }
 
-    /* Mobile scroll optimization */
+/* Mobile scroll optimization */
     * {
         -webkit-tap-highlight-color: transparent;
         -webkit-touch-callout: none;
@@ -1251,6 +1251,15 @@ body {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         scroll-behavior: auto;
+        position: relative;
+    }
+
+    section {
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: auto;
+        position: relative;
     }
 
     .hero {
@@ -1261,6 +1270,8 @@ body {
         -webkit-overflow-scrolling: touch;
         position: relative;
         scroll-behavior: auto;
+        transform: translateZ(0);
+        backface-visibility: hidden;
     }
 
     .hero-content {
@@ -1272,22 +1283,29 @@ body {
         transform: translateZ(0);
         backface-visibility: hidden;
         scroll-behavior: auto;
+        position: relative;
     }
 
     .hero-text {
         text-align: center;
         scroll-behavior: auto;
+        position: relative;
+        transform: translateZ(0);
     }
 
     .hero-title {
         font-size: 2.2rem;
         line-height: 1.1;
         scroll-behavior: auto;
+        position: relative;
+        transform: translateZ(0);
     }
 
     .title-highlight {
         font-size: 1.8rem;
         scroll-behavior: auto;
+        position: relative;
+        transform: translateZ(0);
     }
 
     .hero-description {
@@ -1295,12 +1313,16 @@ body {
         max-width: 350px;
         line-height: 1.5;
         scroll-behavior: auto;
+        position: relative;
+        transform: translateZ(0);
     }
 
     .hero-buttons {
         justify-content: center;
         gap: 0.8rem;
         scroll-behavior: auto;
+        position: relative;
+        transform: translateZ(0);
     }
 
     .image-container {
@@ -1310,6 +1332,7 @@ body {
         transform: translateZ(0);
         backface-visibility: hidden;
         scroll-behavior: auto;
+        position: relative;
     }
 
     .image-wrapper {
@@ -1322,6 +1345,7 @@ body {
         transition: none;
         box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
         scroll-behavior: auto;
+        position: relative;
     }
 
     .image-wrapper img {
@@ -1332,6 +1356,7 @@ body {
         transform: scale(1) rotate(0deg);
         transition: none;
         scroll-behavior: auto;
+        position: relative;
     }
 
     .social-link {
@@ -1342,6 +1367,7 @@ body {
         transform: scale(1) rotate(0deg);
         transition: none;
         scroll-behavior: auto;
+        position: relative;
     }
 
     /* Smooth Scrolling */
