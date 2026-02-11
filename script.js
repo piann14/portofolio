@@ -23,20 +23,65 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Navigation functionality
 function initializeNavigation() {
+    // Check if elements exist
+    if (!hamburger || !navMenu || !navLinks) {
+        console.error('Navigation elements not found');
+        return;
+    }
+    
     // Mobile menu toggle
-    hamburger.addEventListener('click', () => {
+    hamburger.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
+        
+        // Add body scroll lock
+        document.body.classList.toggle('nav-open');
     });
-
+    
     // Close mobile menu when clicking on a link
     navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Get the target href
+            const targetHref = link.getAttribute('href');
+            const target = document.querySelector(targetHref);
+            
+            if (target) {
+                const offsetTop = target.offsetTop - 80;
+                
+                // Reset all animations before scroll
+                resetAllAnimations();
+                
+                // Close mobile menu
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.body.classList.remove('nav-open');
+                
+                // Force smooth scroll to target
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }, 100);
+            }
         });
     });
-
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            document.body.classList.remove('nav-open');
+        }
+    });
+    
     // Active link highlighting
     setActiveNavLink();
     window.addEventListener('scroll', setActiveNavLink);
@@ -61,23 +106,35 @@ function setActiveNavLink() {
 
 // Scroll effects
 function initializeScrollEffects() {
-    // Reset animations when scrolling to hero
-    window.addEventListener('scroll', () => {
+    // Performance optimization for mobile
+    let isScrolling = false;
+    let scrollTimeout;
+    let ticking = false;
+    
+    // Use requestAnimationFrame for smooth scroll
+    function updateScroll() {
         if (window.scrollY > 50) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
-            // Reset image animation when back to top
             resetImageAnimation();
         }
 
-        // Hide scroll indicator after scrolling
         if (window.scrollY > 100) {
             scrollIndicator.style.opacity = '0';
         } else {
             scrollIndicator.style.opacity = '1';
         }
-    });
+        
+        ticking = false;
+    }
+    
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateScroll);
+            ticking = true;
+        }
+    }, { passive: true, capture: false });
 
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -86,36 +143,143 @@ function initializeScrollEffects() {
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
                 const offsetTop = target.offsetTop - 80;
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
                 
-                // Reset animations when navigating to hero
-                if (this.getAttribute('href') === '#home') {
-                    setTimeout(resetImageAnimation, 500);
+                // Reset all animations before scroll
+                resetAllAnimations();
+                
+                // Force smooth scroll with multiple methods
+                try {
+                    // Method 1: Modern browsers
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                } catch (error) {
+                    // Method 2: Fallback with polyfill
+                    const startPosition = window.pageYOffset;
+                    const targetPosition = offsetTop;
+                    const distance = targetPosition - startPosition;
+                    const duration = 1200; // Slightly longer for smoother
+                    
+                    let startTime = null;
+                    
+                    function smoothScroll(currentTime) {
+                        if (startTime === null) startTime = currentTime;
+                        
+                        const timeElapsed = currentTime - startTime;
+                        const progress = Math.min(timeElapsed / duration, 1);
+                        
+                        // Use easeInOutCubic for smoother animation
+                        const easeProgress = progress < 0.5
+                            ? 4 * progress * progress * progress
+                            : 1 - Math.pow(-2 * progress + 2, 2);
+                        
+                        const currentPosition = startPosition + (distance * easeProgress);
+                        window.scrollTo(0, currentPosition);
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(smoothScroll);
+                        } else {
+                            // Scroll completed, restart animations
+                            setTimeout(() => {
+                                resetImageAnimation();
+                            }, 200);
+                        }
+                    }
+                    
+                    requestAnimationFrame(smoothScroll);
                 }
             }
         });
     });
 }
 
+// Reset all animations
+function resetAllAnimations() {
+    const imageWrapper = document.querySelector('.image-wrapper');
+    const heroElements = document.querySelectorAll('.hero-subtitle, .hero-title, .hero-description, .hero-buttons');
+    
+    if (imageWrapper) {
+        // Force reset image to normal state
+        imageWrapper.style.animation = 'none';
+        imageWrapper.style.transform = 'scale(1) rotate(0deg)';
+        imageWrapper.style.boxShadow = '0 0 20px rgba(37, 99, 235, 0.2)';
+        imageWrapper.style.opacity = '1';
+        
+        // Force reflow
+        void imageWrapper.offsetWidth;
+    }
+    
+    // Reset text animations
+    heroElements.forEach(element => {
+        element.style.animation = 'none';
+        element.style.opacity = '0';
+        element.style.transform = 'none';
+        element.style.visibility = 'hidden';
+    });
+    
+    // Restart animations after a short delay
+    setTimeout(() => {
+        // Restart image animation
+        if (imageWrapper) {
+            const isMobile = window.innerWidth <= 768;
+            if (!isMobile) {
+                imageWrapper.style.animation = 'imageGlow 4s ease-in-out infinite';
+                imageWrapper.style.boxShadow = '0 0 30px rgba(37, 99, 235, 0.3), 0 0 60px rgba(37, 99, 235, 0.1)';
+            }
+        }
+        
+        // Restart text animations
+        heroElements[0].style.animation = 'fadeInUp 0.8s ease forwards';
+        heroElements[0].style.animationDelay = '0.2s';
+        heroElements[0].style.opacity = '1';
+        heroElements[0].style.visibility = 'visible';
+        
+        heroElements[1].style.animation = 'fadeInUp 0.8s ease forwards';
+        heroElements[1].style.animationDelay = '0.4s';
+        heroElements[1].style.opacity = '1';
+        heroElements[1].style.visibility = 'visible';
+        
+        heroElements[2].style.animation = 'fadeInUp 0.8s ease forwards';
+        heroElements[2].style.animationDelay = '0.6s';
+        heroElements[2].style.opacity = '1';
+        heroElements[2].style.visibility = 'visible';
+        
+        heroElements[3].style.animation = 'fadeInUp 0.8s ease forwards';
+        heroElements[3].style.animationDelay = '0.8s';
+        heroElements[3].style.opacity = '1';
+        heroElements[3].style.visibility = 'visible';
+        
+        heroElements[4].style.animation = 'fadeInUp 0.8s ease forwards';
+        heroElements[4].style.animationDelay = '1s';
+        heroElements[4].style.opacity = '1';
+        heroElements[4].style.visibility = 'visible';
+    }, 100);
+}
+
 // Reset image animation
 function resetImageAnimation() {
     const imageWrapper = document.querySelector('.image-wrapper');
+    const isMobile = window.innerWidth <= 768;
+    
     if (imageWrapper) {
         // Force reset to normal state
         imageWrapper.style.animation = 'none';
-        imageWrapper.style.transform = 'scale(1)';
-        imageWrapper.style.boxShadow = '0 0 30px rgba(37, 99, 235, 0.3), 0 0 60px rgba(37, 99, 235, 0.1)';
+        imageWrapper.style.transform = 'scale(1) rotate(0deg)';
+        imageWrapper.style.boxShadow = isMobile 
+            ? '0 0 20px rgba(37, 99, 235, 0.2)'
+            : '0 0 30px rgba(37, 99, 235, 0.3), 0 0 60px rgba(37, 99, 235, 0.1)';
         
         // Force reflow
         void imageWrapper.offsetWidth;
         
-        // Restart animation after a short delay
-        setTimeout(() => {
-            imageWrapper.style.animation = 'imageGlow 4s ease-in-out infinite';
-        }, 50);
+        // Only restart animation on desktop
+        if (!isMobile) {
+            setTimeout(() => {
+                imageWrapper.style.animation = 'imageGlow 4s ease-in-out infinite';
+            }, 50);
+        }
     }
 }
 

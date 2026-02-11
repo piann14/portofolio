@@ -1205,10 +1205,26 @@ body {
 
     .hamburger {
         display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        padding: 0.5rem;
+        z-index: 1000;
+    }
+
+    .bar {
+        width: 25px;
+        height: 3px;
+        background: var(--text-primary);
+        margin: 3px 0;
+        transition: var(--transition);
+        border-radius: 2px;
     }
 
     .hamburger.active .bar:nth-child(2) {
         opacity: 0;
+        transform: translateY(8px) rotate(45deg);
     }
 
     .hamburger.active .bar:nth-child(1) {
@@ -1219,9 +1235,22 @@ body {
         transform: translateY(-8px) rotate(-45deg);
     }
 
+    /* Smooth Scrolling */
+    html {
+        scroll-padding-top: 80px;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
     .hero {
         padding: 1rem;
         min-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
     }
 
     .hero-content {
@@ -1229,6 +1258,9 @@ body {
         gap: 2rem;
         text-align: center;
         padding: 0 1rem;
+        will-change: transform;
+        transform: translateZ(0);
+        backface-visibility: hidden;
     }
 
     .hero-text {
@@ -1255,25 +1287,41 @@ body {
         gap: 0.8rem;
     }
 
-    .btn {
-        padding: 0.8rem 1.8rem;
-        font-size: 0.9rem;
-    }
-
     .image-container {
         width: 250px;
         height: 250px;
+        will-change: transform;
+        transform: translateZ(0);
+        backface-visibility: hidden;
     }
 
     .image-wrapper {
         width: 250px;
         height: 250px;
+        border-radius: 50%;
+        overflow: hidden;
+        animation: none;
+        transform: scale(1) rotate(0deg);
+        transition: none;
+        box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+    }
+
+    .image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        transform: scale(1) rotate(0deg);
+        transition: none;
     }
 
     .social-link {
         width: 45px;
         height: 45px;
         font-size: 1rem;
+        animation: none;
+        transform: scale(1) rotate(0deg);
+        transition: none;
     }
 
     .skills-categories {
@@ -1336,6 +1384,30 @@ body {
         flex-direction: column;
         text-align: center;
         gap: 0.5rem;
+    }
+
+    /* Disable heavy animations on mobile */
+    .hero-subtitle,
+    .hero-title,
+    .hero-description,
+    .hero-buttons {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .title-highlight {
+        animation: none;
+        filter: none;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        animation: none;
+    }
+
+    .social-link {
+        animation: none;
     }
 }
 
