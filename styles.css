@@ -1244,17 +1244,26 @@ body {
         -webkit-touch-callout: none;
         -webkit-user-select: none;
         user-select: none;
+        -webkit-overflow-scrolling: touch;
     }
 
     html, body {
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        scroll-behavior: auto;
+        position: fixed;
+        width: 100%;
+        height: 100%;
     }
 
     section {
         overflow-x: hidden;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: auto;
+        position: relative;
+        width: 100%;
     }
 
     .hero {
@@ -1263,6 +1272,11 @@ body {
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        scroll-behavior: auto;
+        position: relative;
+        width: 100%;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
     }
 
     .scroll-indicator {
@@ -1276,35 +1290,56 @@ body {
         gap: 2rem;
         text-align: center;
         padding: 0 1rem;
+        position: relative;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
     }
 
     .hero-text {
         text-align: center;
+        position: relative;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
     }
 
     .hero-title {
         font-size: 2.2rem;
         line-height: 1.1;
+        position: relative;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
     }
 
     .title-highlight {
         font-size: 1.8rem;
+        position: relative;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
     }
 
     .hero-description {
         font-size: 0.95rem;
         max-width: 350px;
         line-height: 1.5;
+        position: relative;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
     }
 
     .hero-buttons {
         justify-content: center;
         gap: 0.8rem;
+        position: relative;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
     }
 
     .image-container {
         width: 250px;
         height: 250px;
+        position: relative;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
     }
 
     .image-wrapper {
@@ -1316,6 +1351,8 @@ body {
         transform: scale(1) rotate(0deg);
         transition: none;
         box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+        position: relative;
+        -webkit-transform: scale(1) rotate(0deg);
     }
 
     .image-wrapper img {
@@ -1325,6 +1362,8 @@ body {
         border-radius: 50%;
         transform: scale(1) rotate(0deg);
         transition: none;
+        position: relative;
+        -webkit-transform: scale(1) rotate(0deg);
     }
 
     .social-link {
@@ -1334,6 +1373,8 @@ body {
         animation: none;
         transform: scale(1) rotate(0deg);
         transition: none;
+        position: relative;
+        -webkit-transform: scale(1) rotate(0deg);
     }
 
     /* Smooth Scrolling */
