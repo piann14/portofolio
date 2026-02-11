@@ -1265,6 +1265,12 @@ body {
         -webkit-overflow-scrolling: touch;
     }
 
+    .scroll-indicator {
+        display: none;
+        visibility: hidden;
+        opacity: 0;
+    }
+
     .hero-content {
         grid-template-columns: 1fr;
         gap: 2rem;
