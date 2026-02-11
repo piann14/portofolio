@@ -1197,6 +1197,7 @@ body {
         transition: 0.3s;
         box-shadow: var(--shadow-lg);
         padding: 2rem 0;
+        z-index: 999;
     }
 
     .nav-menu.active {
@@ -1233,6 +1234,112 @@ body {
 
     .hamburger.active .bar:nth-child(3) {
         transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* Mobile scroll optimization */
+    * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    html, body {
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: auto;
+    }
+
+    .hero {
+        padding: 1rem;
+        min-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+        scroll-behavior: auto;
+    }
+
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+        padding: 0 1rem;
+        will-change: transform;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        scroll-behavior: auto;
+    }
+
+    .hero-text {
+        text-align: center;
+        scroll-behavior: auto;
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+        line-height: 1.1;
+        scroll-behavior: auto;
+    }
+
+    .title-highlight {
+        font-size: 1.8rem;
+        scroll-behavior: auto;
+    }
+
+    .hero-description {
+        font-size: 0.95rem;
+        max-width: 350px;
+        line-height: 1.5;
+        scroll-behavior: auto;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+        gap: 0.8rem;
+        scroll-behavior: auto;
+    }
+
+    .image-container {
+        width: 250px;
+        height: 250px;
+        will-change: transform;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        scroll-behavior: auto;
+    }
+
+    .image-wrapper {
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        overflow: hidden;
+        animation: none;
+        transform: scale(1) rotate(0deg);
+        transition: none;
+        box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+        scroll-behavior: auto;
+    }
+
+    .image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        transform: scale(1) rotate(0deg);
+        transition: none;
+        scroll-behavior: auto;
+    }
+
+    .social-link {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+        animation: none;
+        transform: scale(1) rotate(0deg);
+        transition: none;
+        scroll-behavior: auto;
     }
 
     /* Smooth Scrolling */
